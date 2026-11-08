@@ -63,6 +63,9 @@ export interface Test {
   /** true for the sample tests that ship with the app */
   builtIn?: boolean;
   source?: string;
+  /** AI-built tests stay sealed (answers hidden) until you have taken them */
+  sealed?: boolean;
+  aiCostUsd?: number;
 }
 
 // ───────────────────────── Attempts ─────────────────────────
@@ -167,4 +170,7 @@ export interface Settings {
   classicTheme: boolean; // Bluebook "test-day blue" interface
   defaultTiming: TimingMode;
   onboarded: boolean;
+  /** Anthropic API key for the AI mock builder — stored only in this browser */
+  apiKey: string;
+  aiEffort: 'medium' | 'high' | 'max';
 }

@@ -6,7 +6,8 @@ import { createAttempt, testStats } from '../lib/attempt';
 import { db } from '../lib/db';
 import { plainText } from '../lib/markup';
 import { parseKeyList } from '../lib/parser';
-import { navigate, useSettings, findTest } from '../lib/store';
+import { isLocked, confirmUnseal } from '../lib/seal';
+import { navigate, useAttempts, useSettings, findTest } from '../lib/store';
 import { classify, DOMAINS, domainOfSkill } from '../lib/taxonomy';
 import type { Module, Question, Response, Section, SectionKind, Test } from '../lib/types';
 import { compressImage, LETTERS, readFileAsDataUrl, uid } from '../lib/util';
@@ -42,11 +43,44 @@ function problems(q: Question): string[] {
 
 export default function Editor({ testId }: { testId?: string }) {
   const [test, setTest] = useState<Test | null | undefined>(undefined);
+  const attempts = useAttempts();
+  const [settings] = useSettings();
   useEffect(() => {
     if (!testId) return setTest(null);
     findTest(testId).then((t) => setTest(t ?? null));
   }, [testId]);
-  if (test === undefined) return <Spinner />;
+  if (test === undefined || !attempts) return <Spinner />;
+  if (test && isLocked(test, attempts))
+    return (
+      <div className="card lock-card">
+        <div className="empty-ic">
+          <Icon name="shield" size={30} />
+        </div>
+        <h2>This mock is sealed</h2>
+        <p>
+          <b>{test.title}</b> was solved by the AI, and its questions and answers stay hidden until you've taken it — so the mock stays fair.
+        </p>
+        <div className="row" style={{ justifyContent: 'center', gap: 10, marginTop: 22 }}>
+          <button
+            className="btn btn-ghost btn-danger"
+            onClick={async () => {
+              if (await confirmUnseal(test)) setTest({ ...test, sealed: false });
+            }}
+          >
+            Reveal anyway
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={async () => {
+              const a = await createAttempt(test, settings.defaultTiming);
+              navigate(`/test/${a.id}`);
+            }}
+          >
+            <Icon name="play" size={14} fill="currentColor" /> Take the test
+          </button>
+        </div>
+      </div>
+    );
   if (!test)
     return (
       <div className="empty">

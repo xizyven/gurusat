@@ -2,6 +2,7 @@ import { Icon } from '../components/Icon';
 import { confirmDialog, Spinner, toast } from '../components/ui';
 import { createAttempt, testStats } from '../lib/attempt';
 import { db } from '../lib/db';
+import { confirmUnseal, isLocked } from '../lib/seal';
 import { navigate, useAttempts, useSettings, useTests } from '../lib/store';
 import type { Test } from '../lib/types';
 import { downloadFile, fmtDate, slugify, uid } from '../lib/util';
@@ -44,6 +45,7 @@ export function Library() {
   };
 
   const edit = async (t: Test) => {
+    if (isLocked(t, attempts) && !(await confirmUnseal(t))) return;
     if (t.builtIn) {
       const copy = cloneTest(t, t.title);
       await db.putTest(copy);
@@ -86,6 +88,7 @@ export function Library() {
           const best = mine.reduce((m, a) => Math.max(m, a.result?.total ?? a.result?.sections[0]?.score ?? 0), 0);
           const activeA = attempts.find((a) => a.testId === t.id && a.status === 'active' && a.kind === 'full');
           const totalQs = t.sections.reduce((s, sec) => s + sec.modules.reduce((x, m) => x + m.questions.length, 0), 0);
+          const locked = isLocked(t, attempts);
           return (
             <div className="card test-card" key={t.id}>
               <div className="test-card-top">
@@ -105,7 +108,13 @@ export function Library() {
                 {st.adaptive && <span className="badge badge-blue">Adaptive</span>}
                 <span className="badge">{st.minutes} min</span>
                 {totalQs === 0 && <span className="badge badge-amber">No questions yet</span>}
+                {t.source === 'ai' && <span className="badge badge-blue">AI-solved</span>}
               </div>
+              {locked && (
+                <div className="sealed-note">
+                  <Icon name="shield" size={14} /> Answers sealed until you finish this test
+                </div>
+              )}
               <div className="test-foot">
                 <div className="test-best">
                   {mine.length ? (
@@ -117,13 +126,16 @@ export function Library() {
                   )}
                 </div>
                 <span className="spacer" />
-                <button className="btn btn-ghost btn-icon" title={t.builtIn ? 'Copy & edit' : 'Edit'} onClick={() => edit(t)}>
-                  <Icon name="edit" size={18} />
+                <button className="btn btn-ghost btn-icon" title={locked ? 'Sealed — reveal & edit' : t.builtIn ? 'Copy & edit' : 'Edit'} onClick={() => edit(t)}>
+                  <Icon name={locked ? 'eyeOff' : 'edit'} size={18} />
                 </button>
                 <button
                   className="btn btn-ghost btn-icon"
                   title="Export as JSON"
-                  onClick={() => downloadFile(`${slugify(t.title)}.gurusat.json`, JSON.stringify({ ...t, builtIn: undefined }, null, 1))}
+                  onClick={async () => {
+                    if (locked && !(await confirmUnseal(t))) return;
+                    downloadFile(`${slugify(t.title)}.gurusat.json`, JSON.stringify({ ...t, builtIn: undefined, sealed: undefined }, null, 1));
+                  }}
                 >
                   <Icon name="download" size={18} />
                 </button>
@@ -144,7 +156,7 @@ export function Library() {
             <Icon name="upload" size={26} />
           </div>
           <h3>Add a test</h3>
-          <p>Paste text, upload a PDF, use screenshots, or import a JSON file.</p>
+          <p>Upload your teacher's questions — the AI solves and seals them for you.</p>
         </button>
       </div>
     </>

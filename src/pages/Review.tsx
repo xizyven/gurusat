@@ -1,13 +1,14 @@
 // Question-by-question analysis in the same Bluebook layout.
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Icon } from '../components/Icon';
-import { Markup, Spinner } from '../components/ui';
+import { Markup, Modal, Spinner, toast } from '../components/ui';
+import { recheckQuestion, type AiError, type Recheck } from '../lib/ai';
 import { rowsFor, TARGET_MS, type Row } from '../lib/analysis';
 import { db } from '../lib/db';
-import { SECTION_NAME } from '../lib/scoring';
-import { answerLabel } from '../lib/spr';
+import { computeResult, SECTION_NAME } from '../lib/scoring';
+import { answerLabel, isCorrect } from '../lib/spr';
 import { navigate, useSettings } from '../lib/store';
-import type { Attempt, MistakeNote } from '../lib/types';
+import type { Attempt, MistakeNote, Question, Test } from '../lib/types';
 import { fmtDuration } from '../lib/util';
 import { QuestionView } from '../runner/QuestionView';
 import '../styles/runner.css';
@@ -40,6 +41,7 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
   const rows = useMemo(() => rowsFor(a), [a]);
   const [filter, setFilter] = useState<Filter>('all');
   const [split, setSplit] = useState(50);
+  const [recheck, setRecheck] = useState(false);
   const list = rows.filter((r) => (filter === 'all' ? true : filter === 'missed' ? r.status !== 'right' : r.marked));
   const cur = rows.find((r) => r.q.id === questionId) ?? list[0] ?? rows[0];
   const posInList = list.findIndex((r) => r.q.id === cur?.q.id);
@@ -128,6 +130,11 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
           </span>
         )}
         <span className="spacer" />
+        {settings.apiKey && (
+          <button className="btn btn-sm" onClick={() => setRecheck(true)} title="Have the AI solve this question again from scratch">
+            <Icon name="refresh" size={14} /> Re-check answer
+          </button>
+        )}
         <span className="badge">{cur.skill}</span>
         {cur.q.difficulty && <span className={`badge ${cur.q.difficulty === 'hard' ? 'badge-red' : cur.q.difficulty === 'medium' ? 'badge-amber' : 'badge-green'}`}>{cur.q.difficulty}</span>}
       </div>
@@ -148,6 +155,7 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
               <div className="rv-explain">
                 <div className="rv-explain-title">
                   <Icon name="lightbulb" size={17} /> Explanation
+                  {a.test.source === 'ai' && <span className="badge" style={{ marginLeft: 4 }}>AI-written</span>}
                 </div>
                 {cur.q.explanation ? (
                   <Markup src={cur.q.explanation} />
@@ -212,6 +220,89 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
           </button>
         </div>
       </footer>
+      {recheck && <RecheckModal a={a} row={cur} onClose={() => setRecheck(false)} onApplied={setA} />}
     </div>
+  );
+}
+
+// ───────────────────────── re-check an answer with the AI ─────────────────────────
+function RecheckModal({ a, row, onClose, onApplied }: { a: Attempt; row: Row; onClose: () => void; onApplied: (a: Attempt) => void }) {
+  const [state, setState] = useState<'working' | 'done' | 'error'>('working');
+  const [res, setRes] = useState<Recheck | null>(null);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    const ac = new AbortController();
+    recheckQuestion(row.q, row.kind, ac.signal)
+      .then((r) => {
+        setRes(r);
+        setState('done');
+      })
+      .catch((e) => {
+        if ((e as AiError).code === 'cancelled') return;
+        setError((e as Error).message);
+        setState('error');
+      });
+    return () => ac.abort();
+  }, [row.q, row.kind]);
+
+  const current: Question = row.q;
+  const agrees = res ? isCorrect({ ...current }, res.answer) || (res.answers ?? []).some((x) => isCorrect(current, x)) : false;
+
+  const apply = async () => {
+    if (!res) return;
+    const patch = (q: Question): Question => (q.id === current.id ? { ...q, answer: res.answer, answers: res.answers, explanation: res.explanation } : q);
+    const patchTest = (t: Test): Test => ({ ...t, sections: t.sections.map((s) => ({ ...s, modules: s.modules.map((m) => ({ ...m, questions: m.questions.map(patch) })) })) });
+    const next: Attempt = { ...a, test: patchTest(a.test) };
+    next.result = computeResult(next);
+    await db.putAttempt(next);
+    const stored = await db.getTest(a.testId);
+    if (stored) await db.putTest(patchTest(stored));
+    onApplied(next);
+    toast('Answer key fixed and your score updated');
+    onClose();
+  };
+
+  return (
+    <Modal title="Re-check this answer" onClose={onClose} icon={<Icon name="refresh" />}>
+      {state === 'working' && (
+        <div className="stack" style={{ alignItems: 'center', padding: '18px 0', textAlign: 'center' }}>
+          <div className="spinner" />
+          <p className="muted">Claude is solving this question again from scratch, without seeing the current answer. This takes up to a minute.</p>
+        </div>
+      )}
+      {state === 'error' && <p style={{ color: 'var(--red)' }}>{error}</p>}
+      {state === 'done' && res && (
+        <div className="stack">
+          {agrees ? (
+            <div className="parse-summary">
+              <Icon name="check" size={18} style={{ color: 'var(--g-600)' }} />
+              Confirmed — the correct answer is <b>{answerLabel(current)}</b>.
+            </div>
+          ) : (
+            <div className="parse-summary" style={{ background: 'var(--amber-50)', borderColor: '#f3dea9' }}>
+              <Icon name="help" size={18} style={{ color: 'var(--amber)' }} />
+              The re-check got <b>{res.answers?.join(' or ') || res.answer}</b>, but the key says <b>{answerLabel(current)}</b>.
+            </div>
+          )}
+          <div className="rv-explain" style={{ marginTop: 0 }}>
+            <div className="rv-explain-title">
+              <Icon name="lightbulb" size={17} /> Re-check reasoning
+            </div>
+            <Markup src={res.explanation} />
+          </div>
+          <p className="hint">Cost ≈ ${res.costUsd.toFixed(2)}</p>
+        </div>
+      )}
+      <div className="modal-foot" style={{ padding: '14px 0 0' }}>
+        <button className="btn" onClick={onClose}>
+          {state === 'done' && !agrees ? 'Keep current answer' : 'Close'}
+        </button>
+        {state === 'done' && res && !agrees && (
+          <button className="btn btn-primary" onClick={apply}>
+            Use {res.answers?.[0] ?? res.answer} as correct
+          </button>
+        )}
+      </div>
+    </Modal>
   );
 }

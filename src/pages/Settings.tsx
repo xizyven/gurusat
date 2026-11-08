@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { ApiKeyCard } from '../components/ApiKey';
 import { Icon } from '../components/Icon';
 import { confirmDialog, toast } from '../components/ui';
 import { TIMING_LABEL } from '../lib/attempt';
@@ -21,7 +22,12 @@ export default function SettingsPage() {
     try {
       const data = JSON.parse(await readFileAsText(f));
       const r = await restoreBackup(data);
-      if (data.settings && typeof data.settings === 'object') save({ ...(data.settings as object), onboarded: true });
+      if (data.settings && typeof data.settings === 'object') {
+        // backups never carry the API key — keep the one already saved here
+        const { apiKey: _ignored, ...rest } = data.settings as Record<string, unknown>;
+        void _ignored;
+        save({ ...rest, onboarded: true });
+      }
       toast(`Restored ${r.tests} tests and ${r.attempts} results`);
     } catch (e) {
       toast((e as Error).message || 'Could not restore that file');
@@ -125,6 +131,17 @@ export default function SettingsPage() {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="card card-pad" style={{ marginBottom: 16 }}>
+        <div className="row" style={{ marginBottom: 4 }}>
+          <div className="card-title">AI mock builder</div>
+          <span className="badge badge-green">Claude Opus 5.5</span>
+        </div>
+        <p className="muted" style={{ fontSize: 13.5, marginBottom: 14 }}>
+          Solves your teacher's questions and writes explanations using your own Anthropic account. A full mock costs about $2–4 of credit.
+        </p>
+        <ApiKeyCard />
       </div>
 
       <div className="card card-pad">

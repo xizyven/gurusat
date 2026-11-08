@@ -89,7 +89,9 @@ export interface Backup {
 
 export async function makeBackup(settings: unknown): Promise<Backup> {
   const [tests, attempts] = await Promise.all([db.allTests(), db.allAttempts()]);
-  return { app: 'gurusat', version: 1, exportedAt: Date.now(), tests, attempts, settings };
+  // never put the API key into a file that might be shared
+  const safe = settings && typeof settings === 'object' ? { ...(settings as Record<string, unknown>), apiKey: undefined } : settings;
+  return { app: 'gurusat', version: 1, exportedAt: Date.now(), tests, attempts, settings: safe };
 }
 
 export async function restoreBackup(b: Backup): Promise<{ tests: number; attempts: number }> {

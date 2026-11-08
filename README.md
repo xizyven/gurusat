@@ -29,9 +29,20 @@ Upload your teacher's mock tests, take them in a test-day interface, and get a r
 - Review every question in the test layout: your answer vs. the correct one, the explanation, time spent, and your highlights
 - Mistake Notebook: every missed question across all tests, tag *why* you missed it, retry them as a practice set
 
-## Adding a test
+## AI Mock Builder (questions only → full mock)
 
-Go to **Add a Test** and pick a method:
+Your teacher's file only has questions? Go to **Add a Test → AI Mock Builder** and drop in the PDF (even a scanned one), screenshots, or pasted text.
+
+1. **Claude** (Anthropic's AI, model `claude-opus-5-5`) reads the document and splits it into Reading & Writing / Math, Module 1 / Module 2. The four parts are solved in parallel.
+2. Every question gets a correct answer (grid-ins get every accepted form), a short explanation, an SAT skill tag and a difficulty. Graphs and diagrams are cropped from the pages automatically.
+3. The mock is **sealed**: you only see "Your mock is ready" with the question counts, then go straight into the test. The editor and export stay locked until you've finished it once (or you deliberately choose *Reveal anyway*).
+4. After the test, **Re-check answer** in the review screen has the AI solve one question again from scratch, without being shown the current key. If it disagrees, you can fix the key and your score updates.
+
+**Setup (once):** create an API key at [console.anthropic.com](https://console.anthropic.com/) (add a little credit under Billing) and paste it in **Settings → AI mock builder**. The key is stored only in your browser, sent only to Anthropic, and never included in backups. A full 98-question mock costs roughly **$2–4**; the solving mode (Fast / Careful / Maximum) trades speed and cost for extra care. AI answers are very accurate but not guaranteed, which is what Re-check is for.
+
+## Importing manually
+
+When you already have the answer key, go to **Add a Test** and pick a manual method:
 
 | Method | Best for |
 |---|---|
@@ -108,7 +119,7 @@ See [`public/tests/demo.json`](public/tests/demo.json) for a complete example.
 
 ## Privacy
 
-Everything you add — tests, answers, results, notes — is stored **only in your browser** (IndexedDB). Nothing is uploaded, and this repository contains only the app and an original demo test. To move to another device, use **Settings → Download a backup**, then **Restore** it there.
+Everything you add — tests, answers, results, notes — is stored **only in your browser** (IndexedDB). The only thing that ever leaves it is the file you choose to send to Anthropic when you use the AI Mock Builder (or a single question when you press Re-check). This repository contains only the app and an original demo test. To move to another device, use **Settings → Download a backup**, then **Restore** it there.
 
 ## Notes
 

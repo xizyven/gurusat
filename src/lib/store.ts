@@ -12,6 +12,8 @@ const DEFAULT_SETTINGS: Settings = {
   classicTheme: false,
   defaultTiming: 'standard',
   onboarded: false,
+  apiKey: '',
+  aiEffort: 'high',
 };
 
 function readSettings(): Settings {

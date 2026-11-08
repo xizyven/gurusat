@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
 import { PdfCropper, pdfSession } from '../components/PdfCropper';
 import { Spinner, toast } from '../components/ui';
+import { AiBuilder } from './AiBuilder';
 import { db, restoreBackup, type Backup } from '../lib/db';
 import { normalizeTest } from '../lib/normalize';
 import { parseKeyList, parseText, type ParseResult } from '../lib/parser';
@@ -10,7 +11,7 @@ import { navigate } from '../lib/store';
 import type { Module, Question, Section, SectionKind, Test } from '../lib/types';
 import { compressImage, readFileAsDataUrl, readFileAsText, uid } from '../lib/util';
 
-type Method = 'text' | 'pdf' | 'shots' | 'json';
+type Method = 'ai' | 'text' | 'pdf' | 'shots' | 'json';
 
 const SAMPLE = `Reading and Writing — Module 1
 
@@ -45,7 +46,7 @@ export function newTest(title: string, sections: Section[], source?: string): Te
 }
 
 export default function ImportPage() {
-  const [method, setMethod] = useState<Method>('text');
+  const [method, setMethod] = useState<Method>('ai');
   const [title, setTitle] = useState('');
 
   return (
@@ -53,7 +54,7 @@ export default function ImportPage() {
       <div className="ph">
         <div>
           <h1>Add a test</h1>
-          <p>Bring in your teacher's mock exam any way you have it. You can fix anything afterwards in the editor.</p>
+          <p>Upload your teacher's questions — GuruSat's AI solves them, writes explanations, and seals the answers until you've taken the test.</p>
         </div>
         <div className="ph-actions">
           <button
@@ -71,6 +72,18 @@ export default function ImportPage() {
         </div>
       </div>
 
+      <button className={`method method-ai ${method === 'ai' ? 'on' : ''}`} onClick={() => setMethod('ai')}>
+        <span className="method-ic">
+          <Icon name="sparkle" size={22} />
+        </span>
+        <div>
+          <b>
+            AI Mock Builder <span className="badge badge-green">Recommended</span>
+          </b>
+          <span>Questions only? Upload the PDF or screenshots. The AI finds every answer, explains it, and takes you straight to the test — no peeking.</span>
+        </div>
+      </button>
+      <div className="method-sub">Or import manually — for when you already have the answer key:</div>
       <div className="method-grid">
         {(
           [
@@ -95,6 +108,7 @@ export default function ImportPage() {
           <label>Test name</label>
           <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Mock Exam #3 — November" />
         </div>
+        {method === 'ai' && <AiBuilder title={title} setTitle={setTitle} />}
         {method === 'text' && <TextImport title={title} />}
         {method === 'pdf' && <PdfImport title={title} setTitle={setTitle} />}
         {method === 'shots' && <ShotsImport title={title} />}
