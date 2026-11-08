@@ -1,0 +1,33 @@
+.chart-wrap { position: relative; }
+.chart-svg { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+.chart-scroll { overflow-x: auto; padding-bottom: 4px; }
+.chart-tick { font-size: 11px; fill: #7b8a83; font-family: var(--font-ui); font-variant-numeric: tabular-nums; }
+.chart-direct { font-size: 11.5px; font-weight: 650; fill: var(--ink-2); font-family: var(--font-ui); }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); margin-bottom: 10px; font-weight: 550; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.chart-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.chart-legend i.tex-wrong { background: repeating-linear-gradient(45deg, #cf3d3d 0 2.5px, #e9a1a1 2.5px 4.5px); }
+.chart-legend i.omit { border: 1.5px dashed #aab4af; background: #fff; }
+.chart-legend i.dash { width: 18px; height: 0; border-top: 2px dashed #33433c; border-radius: 0; }
+.chart-tip {
+  position: absolute; top: 8px; transform: translateX(-50%); pointer-events: none;
+  min-width: 190px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+  box-shadow: var(--shadow); font-size: 12.5px; z-index: 5;
+}
+.chart-tip.static { left: auto; right: 8px; top: 34px; transform: none; }
+.chart-tip-title { font-weight: 700; font-size: 13px; }
+.chart-tip-sub { color: var(--muted); font-size: 11.5px; margin-bottom: 4px; }
+.chart-tip-row { display: flex; justify-content: space-between; gap: 14px; margin-top: 4px; }
+.chart-tip-row span { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.chart-tip-row i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.chart-tip-row b { font-variant-numeric: tabular-nums; }
+
+.seg-bar { display: flex; gap: 3px; }
+.seg-bar span { width: 22px; height: 10px; border-radius: 2px; background: #e3e9e5; }
+.seg-bar span.on { background: var(--g-700); }
+
+.scale-bar { width: 100%; }
+.scale-track { position: relative; height: 8px; border-radius: 99px; background: linear-gradient(90deg, #e3ece6, #cfe6cf); margin: 10px 0 6px; }
+.scale-range { position: absolute; top: -3px; bottom: -3px; border-radius: 99px; background: rgba(74, 160, 74, 0.35); }
+.scale-dot { position: absolute; top: 50%; width: 18px; height: 18px; border-radius: 50%; background: var(--g-800); border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); transform: translate(-50%, -50%); }
+.scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
