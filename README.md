@@ -29,9 +29,20 @@ Upload your teacher's mock tests, take them in a test-day interface, and get a r
 - Review every question in the test layout: your answer vs. the correct one, the explanation, time spent, and your highlights
 - Mistake Notebook: every missed question across all tests, tag *why* you missed it, retry them as a practice set
 
-## AI Mock Builder (questions only → full mock)
+## Adding a test: highlighted answers (main way, free)
 
-Your teacher's file only has questions? Go to **Add a Test → AI Mock Builder** and drop in the PDF (even a scanned one), screenshots, or pasted text.
+Go to **Add a Test** and drop in the teacher's **Word (.docx)** or **PDF** file where the correct answers are marked. GuruSat finds every question and takes the marked choice as the answer key:
+
+- **Word:** text highlight, shading, colored text or bold on a choice. Automatic list numbering (1., 2. / A), B)) is understood.
+- **PDF:** highlight drawn on the page, highlight annotations (Acrobat, Edge, Preview), colored text, or a bold font.
+- **Grid-in questions:** a highlighted number under the question (e.g. `7/2`) becomes the answer and is removed from the question text.
+- Images in the file are attached to their questions as figures.
+
+You never see a preview: the screen only says how many questions and answer keys were found, then **Begin test now**. The test stays sealed (no editor, no export) until you've finished it once. Questions without a marked answer are still in the test but aren't scored, and you're told which numbers they are. Scanned PDFs (pictures of pages) can't be read this way; screenshots aren't supported because the highlight would be visible during the test.
+
+## AI Mock Builder (optional, paid)
+
+Your teacher's file only has questions? Go to **Add a Test → AI solves it** and drop in the PDF (even a scanned one), screenshots, or pasted text.
 
 1. **Claude** (Anthropic's AI, model `claude-opus-5-5`) reads the document and splits it into Reading & Writing / Math, Module 1 / Module 2. The four parts are solved in parallel.
 2. Every question gets a correct answer (grid-ins get every accepted form), a short explanation, an SAT skill tag and a difficulty. Graphs and diagrams are cropped from the pages automatically.

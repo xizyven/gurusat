@@ -68,7 +68,7 @@ function Report({ a }: { a: Attempt }) {
     navigate(`/test/${na.id}`);
   };
   const retryMistakes = async () => {
-    const items = rows.filter((x) => x.status !== 'right').map((x) => ({ kind: x.kind, q: x.q }));
+    const items = rows.filter((x) => x.status === 'wrong' || x.status === 'omit').map((x) => ({ kind: x.kind, q: x.q }));
     if (!items.length) return toast('No mistakes to retry 🎉');
     const t = practiceTest(`Retry: ${a.testTitle}`, items);
     const na = await createAttempt(t, 'untimed', 'practice');
@@ -207,6 +207,12 @@ function Report({ a }: { a: Attempt }) {
         <Stat icon="timer" value={fmtDuration(avg)} label="Avg. per question" />
         <Stat icon="undo" value={changes} label="Answer changes" />
       </div>
+
+      {(r.unscored ?? 0) > 0 && (
+        <p className="rep-disclaimer">
+          <Icon name="help" size={14} /> {r.unscored} question{r.unscored === 1 ? ' was' : 's were'} shown but not scored because the file had no highlighted answer for {r.unscored === 1 ? 'it' : 'them'}.
+        </p>
+      )}
 
       {/* ───── insights ───── */}
       {tips.length > 0 && (
@@ -349,9 +355,9 @@ function Report({ a }: { a: Attempt }) {
                   </span>
                 </td>
                 <td>
-                  <span className={`rep-res ${x.status}`}>
+                  <span className={`rep-res ${x.status === 'nokey' ? 'omit' : x.status}`}>
                     <Icon name={x.status === 'right' ? 'check' : x.status === 'wrong' ? 'x' : 'minus'} size={13} stroke={3} />
-                    {x.status === 'right' ? 'Correct' : x.status === 'wrong' ? 'Incorrect' : 'Omitted'}
+                    {x.status === 'right' ? 'Correct' : x.status === 'wrong' ? 'Incorrect' : x.status === 'nokey' ? 'Not scored' : 'Omitted'}
                   </span>
                 </td>
                 <td className="mono">{x.answer ?? '—'}</td>

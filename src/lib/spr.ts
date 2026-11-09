@@ -63,6 +63,11 @@ export function checkSpr(entry: string | undefined, q: Pick<Question, 'answer' |
   return false;
 }
 
+/** False when the test has no answer key for this question (it is shown but not scored). */
+export function hasKey(q: Pick<Question, 'type' | 'answer' | 'answers'>): boolean {
+  return q.type === 'mcq' ? !!q.answer : !!(q.answer || (q.answers && q.answers.length));
+}
+
 export function isCorrect(q: Question, answer: string | undefined): boolean {
   if (!answer) return false;
   if (q.type === 'spr') return checkSpr(answer, q);

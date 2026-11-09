@@ -1,13 +1,13 @@
 // Turning an attempt into something you can learn from.
 import { takenModules } from './scoring';
-import { isCorrect } from './spr';
+import { hasKey, isCorrect } from './spr';
 import { classify, DOMAINS } from './taxonomy';
 import type { Attempt, Question, SectionKind } from './types';
 import { fmtDuration } from './util';
 
 export const TARGET_MS: Record<SectionKind, number> = { rw: 71_000, math: 95_000 };
 
-export type Status = 'right' | 'wrong' | 'omit';
+export type Status = 'right' | 'wrong' | 'omit' | 'nokey';
 
 export interface Row {
   q: Question;
@@ -37,7 +37,7 @@ export function rowsFor(a: Attempt): Row[] {
   for (const m of takenModules(a)) {
     m.questions.forEach((q, i) => {
       const r = a.responses[q.id];
-      const status: Status = !r?.answer ? 'omit' : isCorrect(q, r.answer) ? 'right' : 'wrong';
+      const status: Status = !hasKey(q) ? 'nokey' : !r?.answer ? 'omit' : isCorrect(q, r.answer) ? 'right' : 'wrong';
       const tags = q.domain && q.skill ? { domain: q.domain, skill: q.skill } : classify(m.kind, q);
       let flip: Row['flip'];
       if (r?.firstAnswer && r.answer && r.firstAnswer !== r.answer) {
@@ -79,7 +79,7 @@ export interface DomainStat {
 export function domainStats(rows: Row[]): DomainStat[] {
   const out: DomainStat[] = [];
   for (const kind of ['rw', 'math'] as SectionKind[]) {
-    const kr = rows.filter((r) => r.kind === kind);
+    const kr = rows.filter((r) => r.kind === kind && r.status !== 'nokey');
     if (!kr.length) continue;
     for (const d of DOMAINS[kind]) {
       const dr = kr.filter((r) => r.domain === d.name);
@@ -215,13 +215,14 @@ export function collectMistakes(attempts: Attempt[]): MistakeItem[] {
       seen.set(key, { key, attemptId: a.id, attemptTitle: a.testTitle, date: a.finishedAt ?? a.createdAt, row, note: a.notes?.[row.q.id] });
     }
   }
-  return [...seen.values()].filter((m) => m.row.status !== 'right');
+  return [...seen.values()].filter((m) => m.row.status === 'wrong' || m.row.status === 'omit');
 }
 
 export function skillTotals(attempts: Attempt[]) {
   const map = new Map<string, { kind: SectionKind; domain: string; skill: string; correct: number; total: number }>();
   for (const a of attempts.filter((x) => x.status === 'completed')) {
     for (const r of rowsFor(a)) {
+      if (r.status === 'nokey') continue;
       const k = `${r.kind}|${r.skill}`;
       const cur = map.get(k) ?? { kind: r.kind, domain: r.domain, skill: r.skill, correct: 0, total: 0 };
       cur.total++;

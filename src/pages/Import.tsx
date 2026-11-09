@@ -3,6 +3,7 @@ import { Icon } from '../components/Icon';
 import { PdfCropper, pdfSession } from '../components/PdfCropper';
 import { Spinner, toast } from '../components/ui';
 import { AiBuilder } from './AiBuilder';
+import { KeyedImport } from './KeyedImport';
 import { db, restoreBackup, type Backup } from '../lib/db';
 import { normalizeTest } from '../lib/normalize';
 import { parseKeyList, parseText, type ParseResult } from '../lib/parser';
@@ -11,7 +12,7 @@ import { navigate } from '../lib/store';
 import type { Module, Question, Section, SectionKind, Test } from '../lib/types';
 import { compressImage, readFileAsDataUrl, readFileAsText, uid } from '../lib/util';
 
-type Method = 'ai' | 'text' | 'pdf' | 'shots' | 'json';
+type Method = 'keyed' | 'ai' | 'text' | 'pdf' | 'shots' | 'json';
 
 const SAMPLE = `Reading and Writing — Module 1
 
@@ -46,7 +47,7 @@ export function newTest(title: string, sections: Section[], source?: string): Te
 }
 
 export default function ImportPage() {
-  const [method, setMethod] = useState<Method>('ai');
+  const [method, setMethod] = useState<Method>('keyed');
   const [title, setTitle] = useState('');
 
   return (
@@ -54,7 +55,7 @@ export default function ImportPage() {
       <div className="ph">
         <div>
           <h1>Add a test</h1>
-          <p>Upload your teacher's questions — GuruSat's AI solves them, writes explanations, and seals the answers until you've taken the test.</p>
+          <p>Upload the test file with the correct answers highlighted. GuruSat reads the key, hides everything, and takes you straight into the test.</p>
         </div>
         <div className="ph-actions">
           <button
@@ -72,21 +73,22 @@ export default function ImportPage() {
         </div>
       </div>
 
-      <button className={`method method-ai ${method === 'ai' ? 'on' : ''}`} onClick={() => setMethod('ai')}>
+      <button className={`method method-ai ${method === 'keyed' ? 'on' : ''}`} onClick={() => setMethod('keyed')}>
         <span className="method-ic">
-          <Icon name="sparkle" size={22} />
+          <Icon name="upload" size={22} />
         </span>
         <div>
           <b>
-            AI Mock Builder <span className="badge badge-green">Recommended</span>
+            Upload a test with highlighted answers <span className="badge badge-green">Recommended</span>
           </b>
-          <span>Questions only? Upload the PDF or screenshots. The AI finds every answer, explains it, and takes you straight to the test — no peeking.</span>
+          <span>Word or PDF where the correct choices are highlighted (or colored / bold). Free, instant, and you never see a preview — straight to the test.</span>
         </div>
       </button>
-      <div className="method-sub">Or import manually — for when you already have the answer key:</div>
+      <div className="method-sub">Other ways to add a test:</div>
       <div className="method-grid">
         {(
           [
+            ['ai', 'sparkle', 'AI solves it', 'No answers in the file? Claude solves it with your own API key (≈ $2–4 per mock).'],
             ['text', 'text', 'Paste text', 'Copy from a PDF, Word file or website and paste it in.'],
             ['pdf', 'file', 'Upload a PDF', 'Reads the text for you. Crop graphs straight from the pages.'],
             ['shots', 'image', 'Screenshots', 'Paste or drop images of each question — works for anything.'],
@@ -108,6 +110,7 @@ export default function ImportPage() {
           <label>Test name</label>
           <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Mock Exam #3 — November" />
         </div>
+        {method === 'keyed' && <KeyedImport title={title} setTitle={setTitle} />}
         {method === 'ai' && <AiBuilder title={title} setTitle={setTitle} />}
         {method === 'text' && <TextImport title={title} />}
         {method === 'pdf' && <PdfImport title={title} setTitle={setTitle} />}

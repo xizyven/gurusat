@@ -156,7 +156,7 @@ export function Library() {
             <Icon name="upload" size={26} />
           </div>
           <h3>Add a test</h3>
-          <p>Upload your teacher's questions — the AI solves and seals them for you.</p>
+          <p>Upload a Word or PDF test with the answers highlighted — it's sealed until you take it.</p>
         </button>
       </div>
     </>

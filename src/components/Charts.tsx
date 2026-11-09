@@ -223,7 +223,7 @@ export function TrendChart({ points, mode, target }: { points: TrendPoint[]; mod
 export interface PaceItem {
   n: number;
   timeMs: number;
-  status: 'right' | 'wrong' | 'omit';
+  status: 'right' | 'wrong' | 'omit' | 'nokey';
   qid: string;
 }
 
@@ -294,9 +294,9 @@ export function PacingChart({ items, targetMs, onPick }: { items: PaceItem[]; ta
                 <path
                   d={`M${cx - barW / 2},${H - pad.b} V${top + 4} q0,-4 4,-4 h${barW - 8} q4,0 4,4 V${H - pad.b} Z`}
                   fill={fill}
-                  stroke={it.status === 'omit' ? STATUS.omit : 'none'}
+                  stroke={it.status === 'omit' || it.status === 'nokey' ? STATUS.omit : 'none'}
                   strokeWidth={1.5}
-                  strokeDasharray={it.status === 'omit' ? '3 2' : undefined}
+                  strokeDasharray={it.status === 'omit' || it.status === 'nokey' ? '3 2' : undefined}
                   opacity={hover === null || hover === i ? 1 : 0.55}
                 />
                 <text x={cx} y={H - 8} textAnchor="middle" className="chart-tick" style={{ fontWeight: hover === i ? 700 : 500 }}>
@@ -317,7 +317,7 @@ export function PacingChart({ items, targetMs, onPick }: { items: PaceItem[]; ta
           </div>
           <div className="chart-tip-row">
             <span>Result</span>
-            <b>{hi.status === 'right' ? '✓ Correct' : hi.status === 'wrong' ? '✕ Incorrect' : '— Omitted'}</b>
+            <b>{hi.status === 'right' ? '✓ Correct' : hi.status === 'wrong' ? '✕ Incorrect' : hi.status === 'nokey' ? 'Not scored' : '— Omitted'}</b>
           </div>
           {hi.timeMs > targetMs * 1.5 && <div className="chart-tip-sub">Slower than your target pace</div>}
         </div>

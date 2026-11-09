@@ -6,7 +6,7 @@
 // rescaled to that size first. Hard questions count a little more when difficulty is tagged,
 // and taking the easier adaptive Module 2 caps the score, just like the real test.
 import type { Attempt, AttemptResult, ModuleVariant, Question, SectionKind, SectionScore, Test } from './types';
-import { isCorrect } from './spr';
+import { hasKey, isCorrect } from './spr';
 
 // [raw out of 54, scaled]
 const RW_CURVE: [number, number][] = [
@@ -101,7 +101,7 @@ export function takenModules(a: Attempt) {
 export function computeResult(a: Attempt): AttemptResult {
   const mods = takenModules(a);
   const sections: SectionScore[] = [];
-  let correct = 0, incorrect = 0, omitted = 0, count = 0, timeMs = 0;
+  let correct = 0, incorrect = 0, omitted = 0, count = 0, timeMs = 0, unscored = 0;
   const bySection = new Map<number, typeof mods>();
   for (const m of mods) {
     if (!bySection.has(m.sectionIndex)) bySection.set(m.sectionIndex, []);
@@ -109,7 +109,10 @@ export function computeResult(a: Attempt): AttemptResult {
   }
   for (const [, list] of bySection) {
     const kind = list[0].kind;
-    const qs = list.flatMap((m) => m.questions);
+    const all = list.flatMap((m) => m.questions);
+    const qs = all.filter(hasKey);
+    unscored += all.length - qs.length;
+    for (const q of all) if (!hasKey(q)) timeMs += a.responses[q.id]?.timeMs ?? 0;
     const right = new Set<string>();
     for (const q of qs) {
       const r = a.responses[q.id];
@@ -123,7 +126,7 @@ export function computeResult(a: Attempt): AttemptResult {
     const s = scaleSection(kind, qs, right, route);
     sections.push({ kind, ...s, correct: right.size, total: qs.length, percentile: percentile(s.score, kind), route });
   }
-  const res: AttemptResult = { sections, correct, incorrect, omitted, questionCount: count, timeMs };
+  const res: AttemptResult = { sections, correct, incorrect, omitted, questionCount: count, timeMs, unscored };
   const rw = sections.find((s) => s.kind === 'rw');
   const math = sections.find((s) => s.kind === 'math');
   if (rw && math && a.kind === 'full') {

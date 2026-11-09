@@ -42,7 +42,7 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
   const [filter, setFilter] = useState<Filter>('all');
   const [split, setSplit] = useState(50);
   const [recheck, setRecheck] = useState(false);
-  const list = rows.filter((r) => (filter === 'all' ? true : filter === 'missed' ? r.status !== 'right' : r.marked));
+  const list = rows.filter((r) => (filter === 'all' ? true : filter === 'missed' ? r.status === 'wrong' || r.status === 'omit' : r.marked));
   const cur = rows.find((r) => r.q.id === questionId) ?? list[0] ?? rows[0];
   const posInList = list.findIndex((r) => r.q.id === cur?.q.id);
 
@@ -105,9 +105,9 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
       </header>
       <div className="rn-dash" />
       <div className="rv-banner">
-        <span className={`rv-chip ${cur.status}`}>
+        <span className={`rv-chip ${cur.status === 'nokey' ? 'omit' : cur.status}`}>
           <Icon name={cur.status === 'right' ? 'check' : cur.status === 'wrong' ? 'x' : 'minus'} size={14} stroke={3} />
-          {cur.status === 'right' ? 'Correct' : cur.status === 'wrong' ? 'Incorrect' : 'Omitted'}
+          {cur.status === 'right' ? 'Correct' : cur.status === 'wrong' ? 'Incorrect' : cur.status === 'nokey' ? 'No answer key — not scored' : 'Omitted'}
         </span>
         <span className="rv-meta">
           Your answer <b>{cur.answer ?? '—'}</b>
@@ -200,7 +200,7 @@ function ReviewInner({ a, setA, questionId }: { a: Attempt; setA: (a: Attempt) =
               <Fragment key={x.q.id}>
                 {sep && <span className="sep" />}
                 <button
-                  className={`${x.status} ${x.q.id === cur.q.id ? 'on' : ''}`}
+                  className={`${x.status === 'nokey' ? 'omit' : x.status} ${x.q.id === cur.q.id ? 'on' : ''}`}
                   style={{ opacity: dim ? 0.35 : 1 }}
                   onClick={() => go(x)}
                   title={`${x.kind === 'rw' ? 'R&W' : 'Math'} M${x.stage} Q${x.n} — ${x.status === 'right' ? 'correct' : x.status === 'wrong' ? 'incorrect' : 'omitted'}`}

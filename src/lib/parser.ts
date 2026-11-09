@@ -15,6 +15,8 @@ export interface ParseResult {
   warnings: string[];
   questionCount: number;
   answered: number;
+  /** question ids in document order */
+  order: string[];
 }
 
 
@@ -324,7 +326,7 @@ export function parseText(raw: string, fallbackKind?: SectionKind): ParseResult 
   const { groups } = splitQuestions(body);
 
   if (!groups.length) {
-    return { sections: [], warnings: ['No numbered questions were found. Make sure each question starts with its number (e.g. "1." or "Question 1").'], questionCount: 0, answered: 0 };
+    return { sections: [], warnings: ['No numbered questions were found. Make sure each question starts with its number (e.g. "1." or "Question 1").'], questionCount: 0, answered: 0, order: [] };
   }
 
   // parse questions and guess a kind for each group
@@ -394,7 +396,7 @@ export function parseText(raw: string, fallbackKind?: SectionKind): ParseResult 
   );
   if (missing.length) warnings.push(`${missing.length} question${missing.length > 1 ? 's have' : ' has'} no correct answer yet: ${missing.slice(0, 12).join(', ')}${missing.length > 12 ? '…' : ''}. Use “Answer key” in the editor to fill them in fast.`);
   if (odd.length) warnings.push(`No A–D choices were found for ${odd.slice(0, 8).join(', ')}${odd.length > 8 ? '…' : ''} — check those questions.`);
-  return { sections, warnings, questionCount: count, answered };
+  return { sections, warnings, questionCount: count, answered, order: parsed.flatMap((g) => g.qs.map((q) => q.id)) };
 }
 
 function applyKey(q: Question, v: string | undefined) {

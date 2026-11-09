@@ -159,6 +159,8 @@ export interface AttemptResult {
   correct: number;
   incorrect: number;
   omitted: number;
+  /** questions shown but not scored (no answer key) */
+  unscored?: number;
   questionCount: number;
   timeMs: number;
 }
