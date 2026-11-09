@@ -1,0 +1,488 @@
+{
+  "id": "gurusat-demo-1",
+  "title": "GuruSat Demo Test",
+  "description": "A short adaptive sample — try every Bluebook feature in about 35 minutes",
+  "createdAt": 1762560000000,
+  "updatedAt": 1762560000000,
+  "breakMinutes": 3,
+  "routingThreshold": 0.6,
+  "sections": [
+    {
+      "id": "demo-rw",
+      "kind": "rw",
+      "modules": [
+        {
+          "id": "demo-rw-m1",
+          "stage": 1,
+          "variant": "standard",
+          "minutes": 7,
+          "questions": [
+            {
+              "id": "demo-rw1-1",
+              "type": "mcq",
+              "passage": "Working with her husband, Julian, the potter Maria Martinez of San Ildefonso Pueblo in New Mexico developed a striking black-on-black pottery style in the early twentieth century. Her pots, polished to a mirrorlike shine and decorated with matte designs, were so ______ that collectors around the world sought them out, and museums still display them today.",
+              "prompt": "Which choice completes the text with the most logical and precise word or phrase?",
+              "choices": [
+                { "id": "c1", "text": "ordinary" },
+                { "id": "c2", "text": "admired" },
+                { "id": "c3", "text": "fragile" },
+                { "id": "c4", "text": "temporary" }
+              ],
+              "answer": "B",
+              "explanation": "**Choice B is correct.** The text says collectors around the world sought the pots out and museums still display them — clear signs that the pots were *admired*.\n\n**A** contradicts the description of a \"striking\" style. **C** and **D** describe physical qualities that wouldn't explain why collectors wanted them.",
+              "domain": "Craft and Structure",
+              "skill": "Words in Context",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-rw1-2",
+              "type": "mcq",
+              "passage": "Many people assume that deserts are nearly lifeless. In the Atacama Desert of Chile, one of the driest places on Earth, years can pass without measurable rain. Yet when rare rains do arrive, dormant seeds buried in the soil sprout almost at once, covering the ground in purple and pink flowers within weeks. Chileans call this event the *desierto florido*, or \"flowering desert.\"",
+              "prompt": "Which choice best describes the overall structure of the text?",
+              "choices": [
+                { "id": "c1", "text": "It presents a common belief and then describes a phenomenon that complicates that belief." },
+                { "id": "c2", "text": "It explains a scientific method and then lists the problems with that method." },
+                { "id": "c3", "text": "It compares two deserts and then argues that one is more important to study." },
+                { "id": "c4", "text": "It describes a recent discovery and then explains why researchers doubt it." }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** The first sentence gives the belief (deserts are nearly lifeless); the rest describes the flowering desert, which challenges it. The text doesn't describe a method (**B**), compare two deserts (**C**), or express doubt (**D**).",
+              "domain": "Craft and Structure",
+              "skill": "Text Structure and Purpose",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-rw1-3",
+              "type": "mcq",
+              "passage": "An ecology team studied birds in four city parks. The team hypothesized that parks with more tree cover would support a greater variety of bird species. The table shows the tree cover of each park and the number of bird species the team observed there.\n\n| Park | Tree cover (%) | Bird species observed |\n|---|---|---|\n| Ash Park | 12 | 9 |\n| Birch Green | 25 | 14 |\n| Cedar Commons | 41 | 22 |\n| Dogwood Field | 58 | 31 |",
+              "prompt": "Which choice best describes data from the table that support the team's hypothesis?",
+              "choices": [
+                { "id": "c1", "text": "Ash Park had the lowest tree cover and the fewest bird species, while Dogwood Field had the highest tree cover and the most bird species." },
+                { "id": "c2", "text": "Birch Green had more bird species than Ash Park had." },
+                { "id": "c3", "text": "Cedar Commons had a tree cover of 41 percent." },
+                { "id": "c4", "text": "Dogwood Field and Cedar Commons together had more than 50 bird species." }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** The hypothesis links *more tree cover* with *more species*. Choice A shows that pattern across the full range of the data. **B** is true but only compares two parks without mentioning tree cover; **C** and **D** are true but don't connect tree cover to variety.",
+              "domain": "Information and Ideas",
+              "skill": "Command of Evidence",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-rw1-4",
+              "type": "mcq",
+              "passage": "The Great Barrier Reef is the largest coral reef system in the ______ for more than 2,300 kilometers along the coast of Queensland, Australia.",
+              "prompt": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+              "choices": [
+                { "id": "c1", "text": "world, it stretches" },
+                { "id": "c2", "text": "world it stretches" },
+                { "id": "c3", "text": "world; it stretches" },
+                { "id": "c4", "text": "world and, it stretches" }
+              ],
+              "answer": "C",
+              "explanation": "**Choice C is correct.** Both parts are independent clauses, and a semicolon can join two independent clauses. **A** is a comma splice, **B** is a run-on, and **D** puts the comma after the conjunction instead of before it.",
+              "domain": "Standard English Conventions",
+              "skill": "Boundaries",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-rw1-5",
+              "type": "mcq",
+              "passage": "For decades, scientists believed that octopuses, being solitary animals, had little capacity for social behavior. ______ field studies off the coast of Australia have documented groups of gloomy octopuses living together in dense communities, sharing dens and interacting frequently.",
+              "prompt": "Which choice completes the text with the most logical transition?",
+              "choices": [
+                { "id": "c1", "text": "Similarly," },
+                { "id": "c2", "text": "However," },
+                { "id": "c3", "text": "For example," },
+                { "id": "c4", "text": "As a result," }
+              ],
+              "answer": "B",
+              "explanation": "**Choice B is correct.** The second sentence *contrasts* with the old belief that octopuses aren't social, so a contrast word is needed. **A** signals similarity, **C** signals an example of the previous claim, and **D** signals a consequence.",
+              "domain": "Expression of Ideas",
+              "skill": "Transitions",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-rw1-6",
+              "type": "mcq",
+              "passage": "While researching a topic, a student has taken the following notes:\n\n- The Svalbard Global Seed Vault is located on a remote Norwegian island in the Arctic.\n- It opened in 2008.\n- The vault stores backup copies of seeds from crop collections around the world.\n- Its purpose is to protect crop diversity in case of natural disasters or war.\n- It can hold up to 4.5 million seed samples.",
+              "prompt": "The student wants to emphasize the purpose of the Svalbard Global Seed Vault. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+              "choices": [
+                { "id": "c1", "text": "The Svalbard Global Seed Vault, which opened in 2008, is located on a remote Norwegian island." },
+                { "id": "c2", "text": "Located in the Arctic, the Svalbard Global Seed Vault can hold up to 4.5 million seed samples." },
+                { "id": "c3", "text": "The Svalbard Global Seed Vault stores backup copies of seeds to protect crop diversity in case of natural disasters or war." },
+                { "id": "c4", "text": "In 2008, a seed vault opened on a remote island in the Arctic." }
+              ],
+              "answer": "C",
+              "explanation": "**Choice C is correct.** It is the only option that states *why* the vault exists — to protect crop diversity. The others focus on location, opening date, or capacity.",
+              "domain": "Expression of Ideas",
+              "skill": "Rhetorical Synthesis",
+              "difficulty": "medium"
+            }
+          ]
+        },
+        {
+          "id": "demo-rw-m2h",
+          "stage": 2,
+          "variant": "harder",
+          "minutes": 6,
+          "questions": [
+            {
+              "id": "demo-rw2h-1",
+              "type": "mcq",
+              "passage": "**Text 1**\n\nSome historians argue that the printing press, introduced in Europe around 1450, transformed society almost overnight. According to this view, books quickly became cheaper, literacy spread rapidly, and new ideas circulated faster than ever before.\n\n**Text 2**\n\nOther scholars agree that the printing press was an agent of change but stress that its effects unfolded gradually. Many early printed books were expensive religious and legal texts, and for decades most people still could not read them. In this view, the press's influence grew over generations rather than years.",
+              "prompt": "Based on the texts, how would the scholars described in Text 2 most likely respond to the view presented in Text 1?",
+              "choices": [
+                { "id": "c1", "text": "By agreeing that the printing press made books cheaper but disputing that this had any effect on literacy" },
+                { "id": "c2", "text": "By suggesting that the view overstates how quickly the printing press changed society" },
+                { "id": "c3", "text": "By arguing that the printing press had less influence than religious and legal institutions did" },
+                { "id": "c4", "text": "By claiming that the printing press was introduced in Europe much later than 1450" }
+              ],
+              "answer": "B",
+              "explanation": "**Choice B is correct.** Text 2 accepts that the press caused change but says the change was *gradual* — so those scholars would say Text 1's \"almost overnight\" claim overstates the speed. Text 2 never denies any effect on literacy (**A**), ranks institutions (**C**), or disputes the date (**D**).",
+              "domain": "Craft and Structure",
+              "skill": "Cross-Text Connections",
+              "difficulty": "hard"
+            },
+            {
+              "id": "demo-rw2h-2",
+              "type": "mcq",
+              "passage": "Bumblebees can learn to roll small balls toward a target to earn a sugar reward. In one experiment, however, some bees rolled balls even when no reward was offered. Researchers noted that the bees often returned to the balls repeatedly and that younger bees rolled balls more often than older bees did. Because the behavior had no obvious benefit for survival, the researchers concluded that it ______",
+              "prompt": "Which choice most logically completes the text?",
+              "choices": [
+                { "id": "c1", "text": "was most likely a form of play, similar to play observed in some other animals." },
+                { "id": "c2", "text": "proves that bumblebees are more intelligent than all other insects." },
+                { "id": "c3", "text": "was caused by the bees mistaking the balls for flowers." },
+                { "id": "c4", "text": "occurred only because the bees expected to receive a reward." }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** A repeated, voluntary activity with no reward and no survival benefit — done more by the young — fits the idea of play. **B** goes far beyond the evidence, **C** has no support in the text, and **D** contradicts the fact that no reward was offered.",
+              "domain": "Information and Ideas",
+              "skill": "Inferences",
+              "difficulty": "hard"
+            },
+            {
+              "id": "demo-rw2h-3",
+              "type": "mcq",
+              "passage": "The collection of letters written by the poet Phillis Wheatley, many of which discuss her 1773 trip to London and her exchanges with prominent figures of her time, ______ historians valuable insight into eighteenth-century literary culture.",
+              "prompt": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+              "choices": [
+                { "id": "c1", "text": "offer" },
+                { "id": "c2", "text": "offers" },
+                { "id": "c3", "text": "have offered" },
+                { "id": "c4", "text": "are offering" }
+              ],
+              "answer": "B",
+              "explanation": "**Choice B is correct.** The subject is the singular noun *collection* (not *letters* or *figures*, which sit inside modifying phrases), so it needs the singular verb *offers*. **A**, **C**, and **D** are all plural.",
+              "domain": "Standard English Conventions",
+              "skill": "Form, Structure, and Sense",
+              "difficulty": "hard"
+            },
+            {
+              "id": "demo-rw2h-4",
+              "type": "mcq",
+              "passage": "Urban planners have long debated how to reduce traffic in crowded cities. In 2003, London introduced a \"congestion charge,\" a daily fee for driving into the central city during busy hours. In the years that followed, traffic in the charging zone fell noticeably, and money collected from the charge was used to improve public transportation. Other cities, including Stockholm and Singapore, have adopted similar policies.",
+              "prompt": "Which choice best states the main idea of the text?",
+              "choices": [
+                { "id": "c1", "text": "London's congestion charge reduced traffic and helped fund public transit, and similar approaches have been used elsewhere." },
+                { "id": "c2", "text": "Urban planners agree that congestion charges are the only effective way to reduce traffic." },
+                { "id": "c3", "text": "Public transportation in London was poorly funded before 2003." },
+                { "id": "c4", "text": "Traffic in central London increased after the congestion charge was introduced." }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** It captures the whole text: the charge, its two results, and its adoption by other cities. **B** contradicts \"long debated,\" **C** isn't stated, and **D** contradicts the text.",
+              "domain": "Information and Ideas",
+              "skill": "Central Ideas and Details",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-rw2h-5",
+              "type": "mcq",
+              "passage": "In Mary Shelley's 1818 novel *Frankenstein*, Victor Frankenstein is a scientist whose ambition blinds him to the consequences of his work. A student claims that Victor eventually recognizes the danger of that ambition and warns others against it.",
+              "prompt": "Which quotation from *Frankenstein* most effectively illustrates the student's claim?",
+              "choices": [
+                { "id": "c1", "text": "\"I had worked hard for nearly two years, for the sole purpose of infusing life into an inanimate body.\"" },
+                { "id": "c2", "text": "\"It was on a dreary night of November that I beheld the accomplishment of my toils.\"" },
+                { "id": "c3", "text": "\"Learn from me, if not by my precepts, at least by my example, how dangerous is the acquirement of knowledge.\"" },
+                { "id": "c4", "text": "\"The world was to me a secret which I desired to divine.\"" }
+              ],
+              "answer": "C",
+              "explanation": "**Choice C is correct.** Victor directly *warns* the listener (\"Learn from me\") about how *dangerous* his pursuit of knowledge was — both parts of the student's claim. **A**, **B**, and **D** show his ambition and work but no recognition of danger.",
+              "domain": "Information and Ideas",
+              "skill": "Command of Evidence",
+              "difficulty": "hard"
+            }
+          ]
+        },
+        {
+          "id": "demo-rw-m2e",
+          "stage": 2,
+          "variant": "easier",
+          "minutes": 6,
+          "questions": [
+            {
+              "id": "demo-rw2e-1",
+              "type": "mcq",
+              "passage": "The new community garden was a ______ success: within its first month, every one of its forty plots had been claimed, and a waiting list had formed.",
+              "prompt": "Which choice completes the text with the most logical and precise word or phrase?",
+              "choices": [
+                { "id": "c1", "text": "modest" },
+                { "id": "c2", "text": "doubtful" },
+                { "id": "c3", "text": "remarkable" },
+                { "id": "c4", "text": "private" }
+              ],
+              "answer": "C",
+              "explanation": "**Choice C is correct.** Every plot claimed within a month *plus* a waiting list shows an outstanding — *remarkable* — success. **A** understates it and **B** contradicts it; **D** doesn't describe success.",
+              "domain": "Craft and Structure",
+              "skill": "Words in Context",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-rw2e-2",
+              "type": "mcq",
+              "passage": "Jazz musician Louis Armstrong was known for his inventive trumpet ______ his distinctive, gravelly singing voice.",
+              "prompt": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+              "choices": [
+                { "id": "c1", "text": "solos and" },
+                { "id": "c2", "text": "solos, and," },
+                { "id": "c3", "text": "solos; and" },
+                { "id": "c4", "text": "solos. And" }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** *And* joins two noun phrases (\"solos\" and \"voice\"), so no punctuation is needed. The other choices add punctuation that splits a single list of two items.",
+              "domain": "Standard English Conventions",
+              "skill": "Boundaries",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-rw2e-3",
+              "type": "mcq",
+              "passage": "Sea otters often wrap themselves in strands of kelp, a type of large seaweed, before they fall asleep. The kelp acts like an anchor, keeping the otters from drifting away with the current while they rest. Some otters even hold paws with one another for the same reason.",
+              "prompt": "Which choice best states the main idea of the text?",
+              "choices": [
+                { "id": "c1", "text": "Sea otters use kelp and other strategies to avoid drifting while they sleep." },
+                { "id": "c2", "text": "Kelp is the most common type of seaweed in the ocean." },
+                { "id": "c3", "text": "Sea otters sleep only during the day." },
+                { "id": "c4", "text": "Ocean currents are stronger at night than during the day." }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** Both details — wrapping in kelp and holding paws — serve one purpose: not drifting while asleep. The other choices are never stated.",
+              "domain": "Information and Ideas",
+              "skill": "Central Ideas and Details",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-rw2e-4",
+              "type": "mcq",
+              "passage": "The Sahara is the largest hot desert in the world. ______ it covers about 9 million square kilometers, an area nearly as large as the United States.",
+              "prompt": "Which choice completes the text with the most logical transition?",
+              "choices": [
+                { "id": "c1", "text": "In fact," },
+                { "id": "c2", "text": "However," },
+                { "id": "c3", "text": "Instead," },
+                { "id": "c4", "text": "Meanwhile," }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** The second sentence *reinforces* the first with a striking specific detail, which is what *In fact* signals. **B** and **C** signal contrast; **D** signals something happening at the same time.",
+              "domain": "Expression of Ideas",
+              "skill": "Transitions",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-rw2e-5",
+              "type": "mcq",
+              "passage": "A city library began lending tools, such as drills and ladders, in addition to books. During the first year of the program, the number of new library card sign-ups doubled, and many new members said they had joined specifically to borrow tools. These results suggest that ______",
+              "prompt": "Which choice most logically completes the text?",
+              "choices": [
+                { "id": "c1", "text": "offering items other than books can attract new library members." },
+                { "id": "c2", "text": "most people no longer want to borrow books from libraries." },
+                { "id": "c3", "text": "the library will soon stop lending books entirely." },
+                { "id": "c4", "text": "tools are more expensive for libraries to buy than books are." }
+              ],
+              "answer": "A",
+              "explanation": "**Choice A is correct.** Sign-ups doubled and new members said they joined for the tools — evidence that non-book items attract members. Nothing in the text supports **B**, **C**, or **D**.",
+              "domain": "Information and Ideas",
+              "skill": "Inferences",
+              "difficulty": "medium"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "demo-math",
+      "kind": "math",
+      "modules": [
+        {
+          "id": "demo-math-m1",
+          "stage": 1,
+          "variant": "standard",
+          "minutes": 8,
+          "questions": [
+            {
+              "id": "demo-m1-1",
+              "type": "mcq",
+              "prompt": "If $3x + 7 = 22$, what is the value of $x$?",
+              "choices": [
+                { "id": "c1", "text": "3" },
+                { "id": "c2", "text": "5" },
+                { "id": "c3", "text": "7" },
+                { "id": "c4", "text": "15" }
+              ],
+              "answer": "B",
+              "explanation": "Subtract 7 from both sides: $3x = 15$. Divide by 3: $x = 5$. Choice **D** is the value of $3x$, not $x$.",
+              "domain": "Algebra",
+              "skill": "Linear equations in one variable",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-m1-2",
+              "type": "mcq",
+              "prompt": "A jacket originally priced at \\$80 is on sale for 25% off the original price. What is the sale price of the jacket?",
+              "choices": [
+                { "id": "c1", "text": "\\$20" },
+                { "id": "c2", "text": "\\$55" },
+                { "id": "c3", "text": "\\$60" },
+                { "id": "c4", "text": "\\$100" }
+              ],
+              "answer": "C",
+              "explanation": "25% of 80 is $0.25 \\times 80 = 20$, so the sale price is $80 - 20 = 60$ dollars. Choice **A** is the discount itself, and **D** adds the discount instead of subtracting it.",
+              "domain": "Problem-Solving and Data Analysis",
+              "skill": "Percentages",
+              "difficulty": "easy"
+            },
+            {
+              "id": "demo-m1-3",
+              "type": "mcq",
+              "prompt": "$$\\begin{aligned} x + y &= 12 \\\\ x - y &= 4 \\end{aligned}$$\n\nThe solution to the given system of equations is $(x, y)$. What is the value of $xy$?",
+              "choices": [
+                { "id": "c1", "text": "8" },
+                { "id": "c2", "text": "16" },
+                { "id": "c3", "text": "32" },
+                { "id": "c4", "text": "48" }
+              ],
+              "answer": "C",
+              "explanation": "Add the equations: $2x = 16$, so $x = 8$. Then $y = 12 - 8 = 4$, and $xy = 8 \\times 4 = 32$. Choice **A** is just the value of $x$.",
+              "domain": "Algebra",
+              "skill": "Systems of linear equations",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-m1-4",
+              "type": "spr",
+              "prompt": "A recipe uses $\\dfrac{3}{4}$ cup of sugar for every 2 cups of flour. At this rate, how many cups of sugar are needed for 5 cups of flour?",
+              "choices": [],
+              "answer": "15/8",
+              "answers": ["15/8", "1.875"],
+              "explanation": "Sugar per cup of flour is $\\dfrac{3}{4} \\div 2 = \\dfrac{3}{8}$. For 5 cups: $5 \\times \\dfrac{3}{8} = \\dfrac{15}{8} = 1.875$. Either **15/8** or **1.875** is accepted.",
+              "domain": "Problem-Solving and Data Analysis",
+              "skill": "Ratios, rates, and units",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-m1-5",
+              "type": "mcq",
+              "image": "./tests/img/circle-arc.svg",
+              "imagePlacement": "question",
+              "prompt": "In the figure, point $O$ is the center of the circle, the radius is 5, and the measure of angle $AOB$ is $72^\\circ$. What is the length of minor arc $AB$?",
+              "choices": [
+                { "id": "c1", "text": "$\\pi$" },
+                { "id": "c2", "text": "$2\\pi$" },
+                { "id": "c3", "text": "$5\\pi$" },
+                { "id": "c4", "text": "$10\\pi$" }
+              ],
+              "answer": "B",
+              "explanation": "The arc is $\\dfrac{72}{360} = \\dfrac{1}{5}$ of the circle. The circumference is $2\\pi(5) = 10\\pi$, so the arc length is $\\dfrac{1}{5}(10\\pi) = 2\\pi$. Choice **D** is the whole circumference.",
+              "domain": "Geometry and Trigonometry",
+              "skill": "Circles",
+              "difficulty": "medium"
+            }
+          ]
+        },
+        {
+          "id": "demo-math-m2",
+          "stage": 2,
+          "variant": "standard",
+          "minutes": 8,
+          "questions": [
+            {
+              "id": "demo-m2-1",
+              "type": "mcq",
+              "prompt": "What is the positive solution to the equation $x^2 - 5x - 14 = 0$?",
+              "choices": [
+                { "id": "c1", "text": "2" },
+                { "id": "c2", "text": "5" },
+                { "id": "c3", "text": "7" },
+                { "id": "c4", "text": "14" }
+              ],
+              "answer": "C",
+              "explanation": "Factor: $(x - 7)(x + 2) = 0$, so $x = 7$ or $x = -2$. The positive solution is 7. Choice **A** drops the negative sign from $-2$.",
+              "domain": "Advanced Math",
+              "skill": "Nonlinear equations and systems",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-m2-2",
+              "type": "mcq",
+              "prompt": "The function $f(t) = 500(1.04)^t$ gives the value, in dollars, of an investment $t$ years after it was made. Which of the following is the best interpretation of the number 1.04 in this context?",
+              "choices": [
+                { "id": "c1", "text": "The investment's value increases by \\$4 each year." },
+                { "id": "c2", "text": "The investment's value increases by 4% each year." },
+                { "id": "c3", "text": "The investment's initial value is \\$1.04." },
+                { "id": "c4", "text": "The investment's value doubles every 4 years." }
+              ],
+              "answer": "B",
+              "explanation": "In $a(1 + r)^t$, the growth factor $1 + r = 1.04$ means $r = 0.04$ — a 4% increase each year. A fixed \\$4 increase (**A**) would be linear, and the initial value (**C**) is 500.",
+              "domain": "Advanced Math",
+              "skill": "Nonlinear functions",
+              "difficulty": "medium"
+            },
+            {
+              "id": "demo-m2-3",
+              "type": "spr",
+              "prompt": "The graph of $y = x^2 - 6x + k$ in the $xy$-plane, where $k$ is a constant, intersects the $x$-axis at exactly one point. What is the value of $k$?",
+              "choices": [],
+              "answer": "9",
+              "answers": ["9"],
+              "explanation": "Exactly one $x$-intercept means the discriminant is zero: $(-6)^2 - 4(1)(k) = 0$, so $36 - 4k = 0$ and $k = 9$. (Check: $x^2 - 6x + 9 = (x - 3)^2$.)",
+              "domain": "Advanced Math",
+              "skill": "Nonlinear functions",
+              "difficulty": "hard"
+            },
+            {
+              "id": "demo-m2-4",
+              "type": "mcq",
+              "image": "./tests/img/right-triangle.svg",
+              "imagePlacement": "question",
+              "prompt": "In right triangle $ABC$ shown, angle $C$ is a right angle, $AC = 8$, and $BC = 15$. What is the value of $\\sin A$?",
+              "choices": [
+                { "id": "c1", "text": "$\\dfrac{8}{17}$" },
+                { "id": "c2", "text": "$\\dfrac{8}{15}$" },
+                { "id": "c3", "text": "$\\dfrac{15}{17}$" },
+                { "id": "c4", "text": "$\\dfrac{17}{15}$" }
+              ],
+              "answer": "C",
+              "explanation": "The hypotenuse is $AB = \\sqrt{8^2 + 15^2} = \\sqrt{289} = 17$. Sine is opposite over hypotenuse; the side opposite angle $A$ is $BC = 15$, so $\\sin A = \\dfrac{15}{17}$. Choice **A** is $\\cos A$.",
+              "domain": "Geometry and Trigonometry",
+              "skill": "Right triangles and trigonometry",
+              "difficulty": "hard"
+            },
+            {
+              "id": "demo-m2-5",
+              "type": "spr",
+              "passage": "| Books read | Number of students |\n|---|---|\n| 1 | 2 |\n| 2 | 3 |\n| 4 | 4 |\n| 7 | 1 |",
+              "prompt": "The table shows how many books each of 10 students read last summer. What is the mean number of books read per student?",
+              "choices": [],
+              "answer": "3.1",
+              "answers": ["3.1", "31/10"],
+              "explanation": "Total books: $1(2) + 2(3) + 4(4) + 7(1) = 2 + 6 + 16 + 7 = 31$. Divide by 10 students: mean $= 3.1$.",
+              "domain": "Problem-Solving and Data Analysis",
+              "skill": "One-variable data",
+              "difficulty": "medium"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 260" width="300" height="260" font-family="Georgia, 'Times New Roman', serif" font-size="18">
+  <rect width="300" height="260" fill="#fff"/>
+  <circle cx="140" cy="140" r="105" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+  <path d="M245 140 A105 105 0 0 0 172.4 40.1" fill="none" stroke="#1a1a1a" stroke-width="4.5"/>
+  <line x1="140" y1="140" x2="245" y2="140" stroke="#1a1a1a" stroke-width="2"/>
+  <line x1="140" y1="140" x2="172.4" y2="40.1" stroke="#1a1a1a" stroke-width="2"/>
+  <path d="M168 140 A28 28 0 0 0 148.7 113.4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+  <circle cx="140" cy="140" r="3.5" fill="#1a1a1a"/>
+  <circle cx="245" cy="140" r="3.5" fill="#1a1a1a"/>
+  <circle cx="172.4" cy="40.1" r="3.5" fill="#1a1a1a"/>
+  <text x="122" y="160" font-style="italic">O</text>
+  <text x="252" y="146" font-style="italic">A</text>
+  <text x="176" y="30" font-style="italic">B</text>
+  <text x="166" y="128" font-size="14">72°</text>
+  <text x="190" y="160" font-size="16">5</text>
+</svg>
