@@ -7,7 +7,7 @@
 //   • section / module headers ("Section 1, Module 2: Math", "Reading and Writing", "Module 2")
 //   • College Board question-bank exports ("Question ID …", "Correct Answer:", "Question Difficulty:")
 import { ensureTags, DOMAINS } from './taxonomy';
-import type { Difficulty, Module, Question, Section, SectionKind } from './types';
+import type { Difficulty, Question, Section, SectionKind } from './types';
 import { uid } from './util';
 
 export interface ParseResult {
@@ -54,7 +54,7 @@ function normalize(raw: string): string {
 }
 
 // ───────── headers ─────────
-function headerInfo(line: string): { kind?: SectionKind; moduleNo?: number } | null {
+function headerInfo(line: string): { kind?: SectionKind; moduleNo?: number; variant?: 'harder' | 'easier' } | null {
   if (line.length > 70) return null;
   const l = line.toLowerCase().replace(/[*#]/g, '').trim();
   let kind: SectionKind | undefined;
@@ -67,7 +67,9 @@ function headerInfo(line: string): { kind?: SectionKind; moduleNo?: number } | n
     (mod && l.length < 60) ||
     (kind && /^(section\s*\d+\s*[,:–—-]?\s*)?(module\s*\d\s*[,:–—-]?\s*)?(reading\s*(and|&)\s*writing|math(ematics)?|verbal|english)(\s*(section|module\s*\d))?\s*[:–—-]?\s*(module\s*\d)?\s*$/.test(l));
   if (!isHeader) return null;
-  return { kind, moduleNo };
+  // adaptive versions only when the file says so, e.g. "Module 2 (Harder)" / "Module 2 – Easy"
+  const variant = mod && /\b(harder|hard|difficult)\b/.test(l) ? 'harder' : mod && /\b(easier|easy)\b/.test(l) ? 'easier' : undefined;
+  return { kind, moduleNo, variant };
 }
 
 // ───────── answer key ─────────
@@ -112,8 +114,10 @@ function questionStart(line: string): { n: number; rest: string } | null {
   return null;
 }
 
-function splitQuestions(lines: string[]): { groups: { kind?: SectionKind; moduleNo?: number; qs: RawQ[] }[] } {
-  const groups: { kind?: SectionKind; moduleNo?: number; qs: RawQ[] }[] = [{ qs: [] }];
+type Variant = 'harder' | 'easier';
+
+function splitQuestions(lines: string[]): { groups: { kind?: SectionKind; moduleNo?: number; variant?: Variant; qs: RawQ[] }[] } {
+  const groups: { kind?: SectionKind; moduleNo?: number; variant?: Variant; qs: RawQ[] }[] = [{ qs: [] }];
   const cur = () => groups[groups.length - 1];
   let expected = 1;
   let curQ: RawQ | null = null;
@@ -123,14 +127,19 @@ function splitQuestions(lines: string[]): { groups: { kind?: SectionKind; module
     const h = headerInfo(line);
     if (h) {
       const g = cur();
-      if (g.qs.length) {
-        groups.push({ kind: h.kind ?? g.kind, moduleNo: h.moduleNo, qs: [] });
-      } else {
+      if (!g.qs.length) {
         g.kind = h.kind ?? g.kind;
         g.moduleNo = h.moduleNo ?? g.moduleNo;
+        g.variant = h.variant ?? g.variant;
+        expected = 1;
+        curQ = null;
+      } else if ((h.kind && h.kind !== g.kind) || (h.moduleNo !== undefined && h.moduleNo !== g.moduleNo) || (h.variant && h.variant !== g.variant)) {
+        // a genuinely new part of the test
+        groups.push({ kind: h.kind ?? g.kind, moduleNo: h.moduleNo, variant: h.variant, qs: [] });
+        expected = 1;
+        curQ = null;
       }
-      expected = 1;
-      curQ = null;
+      // otherwise it's the same header repeated at the top of a new page — ignore it
       continue;
     }
     if (qbank) {
@@ -334,7 +343,7 @@ export function parseText(raw: string, fallbackKind?: SectionKind): ParseResult 
     const items = g.qs.map((rq) => parseOne(rq, g.kind ?? fallbackKind));
     const mathVotes = items.filter((i) => i.kind === 'math').length;
     const kind: SectionKind = g.kind ?? fallbackKind ?? (mathVotes > items.length / 2 ? 'math' : 'rw');
-    return { kind, moduleNo: g.moduleNo, qs: items.map((i) => i.q) };
+    return { kind, moduleNo: g.moduleNo, variant: g.variant, qs: items.map((i) => i.q) };
   });
 
   // answer key
@@ -349,33 +358,36 @@ export function parseText(raw: string, fallbackKind?: SectionKind): ParseResult 
     }
   }
 
-  // group modules into sections
+  // group modules into sections: one section per kind, Module 1 + Module 2.
+  // Blocks that belong to the same module (same number, same version) are merged, so a test is
+  // adaptive only when the file explicitly labels a harder AND an easier Module 2.
   const sections: Section[] = [];
   for (const g of parsed) {
     let sec = sections.find((s) => s.kind === g.kind);
-    if (!sec || (sections[sections.length - 1] !== sec && sec.modules.length >= 2)) {
+    if (!sec) {
       sec = { id: uid('s_'), kind: g.kind, modules: [] };
       sections.push(sec);
     }
-    const perQ = g.kind === 'rw' ? 32 / 27 : 35 / 22;
-    const stage: 1 | 2 = g.moduleNo === 2 || sec.modules.length >= 1 ? 2 : 1;
-    const mod: Module = {
-      id: uid('m_'),
-      stage,
-      variant: 'standard',
-      minutes: Math.max(1, Math.round(g.qs.length * perQ)),
-      questions: g.qs.map((q) => ensureTags(g.kind, q)),
-    };
-    sec.modules.push(mod);
+    const stage: 1 | 2 = g.moduleNo === 1 ? 1 : g.moduleNo === 2 ? 2 : sec.modules.some((m) => m.stage === 1) ? 2 : 1;
+    const variant = stage === 2 && g.variant ? g.variant : 'standard';
+    const questions = g.qs.map((q) => ensureTags(g.kind, q));
+    const same = sec.modules.find((m) => m.stage === stage && (m.variant === variant || (stage === 2 && !g.variant)));
+    if (same) same.questions.push(...questions);
+    else sec.modules.push({ id: uid('m_'), stage, variant, minutes: 0, questions });
   }
   for (const s of sections) {
     const m2 = s.modules.filter((m) => m.stage === 2);
-    if (m2.length >= 2) {
-      m2[0].variant = 'harder';
-      m2.slice(1).forEach((m) => (m.variant = 'easier'));
-      warnings.push(`${s.kind === 'rw' ? 'Reading and Writing' : 'Math'} has ${m2.length} second modules — set up as adaptive (harder / easier). Change this in the editor if that's wrong.`);
+    const adaptive = m2.some((m) => m.variant === 'harder') && m2.some((m) => m.variant === 'easier');
+    if (!adaptive) m2.forEach((m) => (m.variant = 'standard'));
+    // merge anything left over into one Module 2
+    if (!adaptive && m2.length > 1) {
+      m2[0].questions = m2.flatMap((m) => m.questions);
+      s.modules = s.modules.filter((m) => m.stage !== 2 || m === m2[0]);
     }
-    if (!s.modules.some((m) => m.stage === 1) && s.modules[0]) s.modules[0].stage = 1;
+    if (adaptive) warnings.push(`${s.kind === 'rw' ? 'Reading and Writing' : 'Math'} has a harder and an easier Module 2 — the test is adaptive: Module 1 decides which one you get.`);
+    s.modules.sort((a, b) => a.stage - b.stage);
+    const perQ = s.kind === 'rw' ? 32 / 27 : 35 / 22;
+    for (const m of s.modules) m.minutes = Math.max(1, Math.round(m.questions.length * perQ));
   }
 
   // warnings
